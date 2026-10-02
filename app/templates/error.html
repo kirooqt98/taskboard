@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error · TaskBoard{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>{{ err.code }}</h1>
+  <p>{{ 'Page not found.' if err.code == 404 else ('Request too large.' if err.code == 413 else ('Something went wrong.' if err.code == 500 else err.description)) }}</p>
+  <a class="btn" href="{{ url_for('tasks.index') }}">Back home</a>
+</section>
+{% endblock %}

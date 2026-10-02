@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}My tasks · TaskBoard{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>New task</h2>
+  <form method="post" action="{{ url_for('tasks.create') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Title <input name="title" required maxlength="120"></label>
+    <label>Notes <textarea name="notes" rows="2" maxlength="2000"></textarea></label>
+    <button class="btn" type="submit">Add task</button>
+  </form>
+</section>
+
+<nav class="tabs" aria-label="Filter">
+  <a href="{{ url_for('tasks.index', show='all') }}" class="{{ 'on' if show == 'all' }}">All</a>
+  <a href="{{ url_for('tasks.index', show='open') }}" class="{{ 'on' if show == 'open' }}">Open</a>
+  <a href="{{ url_for('tasks.index', show='done') }}" class="{{ 'on' if show == 'done' }}">Done</a>
+</nav>
+
+{% if not tasks %}
+  <p class="muted empty">Nothing here yet.</p>
+{% endif %}
+<ul class="tasks">
+  {% for t in tasks %}
+  <li class="task {{ 'done' if t['done'] }}">
+    <div class="body">
+      <strong>{{ t['title'] }}</strong>
+      {% if t['notes'] %}<p>{{ t['notes'] }}</p>{% endif %}
+      <small class="muted">{{ t['created_at'] }} UTC</small>
+    </div>
+    <div class="actions">
+      <form method="post" action="{{ url_for('tasks.toggle', task_id=t['id']) }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn small" type="submit">{{ 'Reopen' if t['done'] else 'Done' }}</button>
+      </form>
+      <a class="btn small ghost" href="{{ url_for('tasks.edit', task_id=t['id']) }}">Edit</a>
+      <form method="post" action="{{ url_for('tasks.delete', task_id=t['id']) }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn small danger" type="submit">Delete</button>
+      </form>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

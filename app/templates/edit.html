@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Edit task · TaskBoard{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Edit task</h1>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Title <input name="title" required maxlength="120" value="{{ request.form.get('title', task['title']) }}"></label>
+    <label>Notes <textarea name="notes" rows="4" maxlength="2000">{{ request.form.get('notes', task['notes']) }}</textarea></label>
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('tasks.index') }}">Cancel</a>
+  </form>
+</section>
+{% endblock %}

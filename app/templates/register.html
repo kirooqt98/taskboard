@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Register · TaskBoard{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Create account</h1>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Username
+      <input name="username" autocomplete="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" autofocus>
+    </label>
+    <label>Password <small>(10+ characters)</small>
+      <input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128">
+    </label>
+    <label>Confirm password
+      <input name="confirm" type="password" autocomplete="new-password" required minlength="10" maxlength="128">
+    </label>
+    <button class="btn" type="submit">Register</button>
+  </form>
+  <p class="muted">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+</section>
+{% endblock %}
